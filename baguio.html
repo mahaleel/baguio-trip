@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Baguio + Atok, Nov 16–18</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EAF0EB; --surface:#F7FAF7; --ink:#17302A; --muted:#55685F;
+  --pine:#1F4A3A; --moss:#7E9C6B; --rose:#B4417A; --rose-soft:#F4DDE8;
+  --line:#C9D6CD; --done:#9AAAA2;
+  color-scheme: light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#10201B; --surface:#172A24; --ink:#E4EEE8; --muted:#9DB2A8;
+    --pine:#8FC7A8; --moss:#7E9C6B; --rose:#F08DB9; --rose-soft:#3A2230;
+    --line:#2B4239; --done:#5F746B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#10201B; --surface:#172A24; --ink:#E4EEE8; --muted:#9DB2A8;
+  --pine:#8FC7A8; --moss:#7E9C6B; --rose:#F08DB9; --rose-soft:#3A2230;
+  --line:#2B4239; --done:#5F746B; color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:560px;margin:0 auto;padding:0 18px 48px}
+h1,h2,h3{font-family:"Bricolage Grotesque","Atkinson Hyperlegible",system-ui,sans-serif;margin:0}
+
+/* hero */
+.hero{position:relative;padding:28px 0 8px}
+.hero svg{display:block;width:100%;height:auto;max-width:100%;color:var(--pine)}
+.hero h1{font-size:clamp(2.4rem,11vw,3.4rem);line-height:.95;font-weight:800;letter-spacing:-.02em;margin-top:14px}
+.hero p{margin:8px 0 0;color:var(--muted)}
+
+/* status */
+.status{margin:18px 0 6px;padding:14px 16px;border-radius:14px;background:var(--rose-soft);color:var(--ink)}
+.status strong{color:var(--rose)}
+.status:empty{display:none}
+
+/* sticky tabs */
+.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);
+  display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:12px 0 10px;margin:0 -2px}
+.tab{appearance:none;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);
+  border-radius:12px;padding:8px 4px;font:inherit;cursor:pointer;text-align:center;line-height:1.15}
+.tab b{display:block;font-family:"Bricolage Grotesque",sans-serif;font-size:1.25rem}
+.tab span{font-size:.78rem;color:var(--muted)}
+.tab[aria-selected="true"]{background:var(--pine);border-color:var(--pine);color:var(--bg)}
+.tab[aria-selected="true"] span{color:var(--bg);opacity:.85}
+.tab:focus-visible,.stop-head:focus-visible,.check:focus-visible,a:focus-visible,.theme:focus-visible{outline:3px solid var(--rose);outline-offset:2px}
+
+.day-title{margin:14px 0 4px;font-size:1.5rem;font-weight:700}
+.day-sub{margin:0 0 14px;color:var(--muted);font-size:.95rem}
+.progress{height:6px;border-radius:6px;background:var(--line);overflow:hidden;margin-bottom:18px}
+.progress i{display:block;height:100%;background:var(--moss);width:0;transition:width .3s}
+
+/* trail */
+.trail{list-style:none;margin:0;padding:0;position:relative}
+.trail::before{content:"";position:absolute;left:58px;top:10px;bottom:10px;width:0;border-left:2px dashed var(--line)}
+.stop{position:relative;display:grid;grid-template-columns:48px 22px 1fr;column-gap:10px;padding:2px 0 14px}
+.time{font-size:.82rem;color:var(--muted);text-align:right;padding-top:4px;font-variant-numeric:tabular-nums;line-height:1.2}
+.node{width:16px;height:16px;border-radius:50%;margin:5px 0 0 1px;background:var(--surface);border:2.5px solid var(--moss);position:relative;z-index:1}
+.stop.k-food .node{border-color:var(--rose)}
+.stop.k-drive .node{border-color:var(--muted);border-radius:4px}
+.stop.done .node{background:var(--done);border-color:var(--done)}
+.stop.now .node{background:var(--rose);border-color:var(--rose);box-shadow:0 0 0 5px var(--rose-soft)}
+.card{min-width:0}
+.stop-head{display:flex;align-items:flex-start;gap:8px;width:100%;appearance:none;border:0;background:none;color:inherit;font:inherit;text-align:left;padding:0;cursor:pointer}
+.stop-head h3{font-size:1.06rem;font-weight:700;line-height:1.3;flex:1}
+.stop.done h3{color:var(--done);text-decoration:line-through;text-decoration-thickness:1.5px}
+.now-tag{font-size:.72rem;font-weight:700;color:var(--rose);display:none}
+.stop.now .now-tag{display:inline}
+.chev{color:var(--muted);transition:transform .2s;flex:none;margin-top:3px}
+.stop.open .chev{transform:rotate(180deg)}
+.detail{display:none;margin-top:6px}
+.stop.open .detail{display:block}
+.detail p{margin:0 0 10px;color:var(--muted);font-size:.95rem}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:6px;border-radius:10px;padding:8px 12px;font:inherit;font-size:.9rem;
+  text-decoration:none;cursor:pointer;border:1.5px solid var(--line);background:var(--surface);color:var(--ink)}
+.btn.primary{background:var(--pine);border-color:var(--pine);color:var(--bg)}
+.check{appearance:none;width:24px;height:24px;border-radius:7px;border:2px solid var(--line);background:var(--surface);flex:none;cursor:pointer;margin:0;display:grid;place-items:center}
+.check:checked{background:var(--moss);border-color:var(--moss)}
+.check:checked::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+
+/* tips */
+.section{background:var(--surface);border-radius:16px;padding:16px;margin-bottom:14px}
+.section h2{font-size:1.15rem;margin-bottom:10px}
+.todo{display:flex;gap:12px;align-items:flex-start;padding:8px 0;border-top:1px solid var(--line)}
+.todo:first-of-type{border-top:0}
+.todo label{flex:1;cursor:pointer}
+.todo small{display:block;color:var(--muted)}
+.fees{width:100%;border-collapse:collapse;font-size:.93rem}
+.fees td{padding:7px 0;border-top:1px solid var(--line);vertical-align:top}
+.fees tr:first-child td{border-top:0}
+.fees td:last-child{text-align:right;white-space:nowrap;padding-left:12px;font-variant-numeric:tabular-nums}
+.note{color:var(--muted);font-size:.85rem;margin:10px 0 0}
+
+.foot{display:flex;justify-content:space-between;align-items:center;margin-top:24px;color:var(--muted);font-size:.85rem}
+.theme{appearance:none;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:6px 10px;font:inherit;font-size:.85rem;cursor:pointer}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <svg viewBox="0 0 520 90" aria-hidden="true" preserveAspectRatio="xMidYMax meet">
+      <path d="M0 90 L60 40 L95 62 L150 18 L210 70 L255 45 L300 74 L360 28 L420 66 L470 44 L520 72 L520 90Z" fill="currentColor" opacity=".14"/>
+      <g fill="currentColor">
+        <path d="M30 90 L42 52 L54 90Z"/><path d="M36 74 L42 44 L48 74Z"/>
+        <path d="M62 90 L70 64 L78 90Z"/>
+        <path d="M112 90 L128 38 L144 90Z"/><path d="M119 70 L128 30 L137 70Z"/>
+        <path d="M150 90 L158 66 L166 90Z"/>
+        <path d="M388 90 L402 46 L416 90Z"/><path d="M394 72 L402 38 L410 72Z"/>
+        <path d="M424 90 L434 60 L444 90Z"/>
+        <path d="M470 90 L482 54 L494 90Z"/>
+      </g>
+      <g fill="var(--rose)"><circle cx="232" cy="84" r="5"/><circle cx="246" cy="86" r="4"/><circle cx="258" cy="83" r="5"/><circle cx="272" cy="86" r="4"/><circle cx="286" cy="84" r="5"/></g>
+    </svg>
+    <h1>Baguio<br>+ Atok</h1>
+    <p>November 16–18, 2026. Pine trees, flower farms, and a 7 PM drive home.</p>
+    <div class="status" id="status" role="status"></div>
+  </header>
+
+  <nav class="tabs" role="tablist" id="tabs" aria-label="Trip days"></nav>
+  <main id="view"></main>
+
+  <div class="foot">
+    <span>Your checkmarks save on this phone.</span>
+    <button class="theme" id="themeBtn" type="button">Theme</button>
+  </div>
+</div>
+
+<script>
+const HOTEL = "NYC Manhattan Suites, 37 Sepic Rd, Campo Filipino, Baguio";
+const DAYS = [
+  {id:"mon", short:"Mon", num:"16", date:"2026-11-16", title:"Up to Atok", sub:"Long drive day. Flower farm first, La Trinidad on the way down.", stops:[
+    ["05:00","Depart Manila","drive","NLEX, SCTEX, TPLEX, then Marcos Hwy straight to La Trinidad and Halsema.",""],
+    ["07:00","Breakfast stop","food","Quick stop at a TPLEX service area.",""],
+    ["10:00","Halsema Highway to Atok","drive","About 1.5–2 hours uphill. Fill up gas in La Trinidad first. Use a low gear on the steep parts.",""],
+    ["12:00","Lunch near Atok","food","The farm closes 12–1 PM. If you arrive before 11:30, go to the farm first and eat after.",""],
+    ["13:00","Northern Blossom Flower Farm","see","Rose cabbages with mountain views. ₱250 per adult, good for two hours. Free coffee and bread at the exit. Closes 4:30 PM.","Northern Blossom Flower Farm Atok Benguet"],
+    ["14:30","Leave Atok","drive","Head back down Halsema before the afternoon fog. Use engine braking.",""],
+    ["16:15","Valley of Colors","see","Painted houses on the hillside. Quick roadside photo stop.","Valley of Colors La Trinidad Benguet"],
+    ["16:40","Strawberry Farm","food","Strawberry taho and ice cream.","Strawberry Farm La Trinidad Benguet"],
+    ["18:00","Check in at NYC Manhattan Suites","rest","Check-in opens at 2 PM, so a late arrival is fine.",HOTEL],
+    ["19:00","Dinner at Good Taste","food","Big servings and cheap. Expect a line, or get takeout and eat at the hotel.","Good Taste Restaurant Baguio"]
+  ]},
+  {id:"tue", short:"Tue", num:"17", date:"2026-11-17", title:"The big day", sub:"Car day. If you fall behind, drop Igorot Stone Kingdom first, then the Night Market.", stops:[
+    ["07:00","Breakfast at hotel","food","Free breakfast, served 7–9 AM.",""],
+    ["07:45","Camp John Hay pine trails","see","Morning mist through the pines. Best tree photos of the trip.","Camp John Hay Baguio"],
+    ["08:45","Chocolate de Batirol","food","Merienda after the walk: tsokolate and bibingka among the pines.","Chocolate de Batirol Camp John Hay"],
+    ["09:30","Bell House + Secret Garden","see","Camp John Hay Historical Core. One ticket covers the Bell House, Secret Garden, and amphitheater.","Bell House Camp John Hay"],
+    ["10:45","Lion’s Head","see","On Kennon Road, about 30 minutes from the city. Check that the road is open first.","Lion's Head Kennon Road Baguio"],
+    ["12:00","Lunch at Cafe Stella","food","733 Ambuklao Rd, Itogon. Tree-house seating with mountain views. Fills up at lunch.","Cafe Stella Ambuklao Road Itogon"],
+    ["14:15","Mines View Park","see","Valley views in daylight.","Mines View Park Baguio"],
+    ["14:50","Good Shepherd","food","Pasalubong. Ube jam and more.","Good Shepherd Convent Baguio"],
+    ["15:15","Wright Park + The Mansion","see","Pool of Pines. The Mansion is across the road.","Wright Park Baguio"],
+    ["16:15","Igorot Stone Kingdom","see","Stone walls and towers. Wear comfy shoes.","Igorot Stone Kingdom Baguio"],
+    ["18:00","Christmas Village","see","Baguio Country Club, “Christmas in Candyland.” Open until 10 PM. Park on Paterno St or Outlook Dr.","Baguio Country Club Christmas Village"],
+    ["19:30","Dinner at Cathy’s Fastfood","food","Near the City Market. Try the fried rice. Check closing time; the Night Market is the backup.","Cathy's Fastfood Baguio"],
+    ["21:00","Night Market, Harrison Rd","food","Ukay-ukay and street food. Short walk from Cathy’s.","Baguio Night Market Harrison Road"]
+  ]},
+  {id:"wed", short:"Wed", num:"18", date:"2026-11-18", title:"Car-free day", sub:"Coding until 7 PM. Walk and take taxis. Bags go in the parked car at check-out.", stops:[
+    ["08:00","Breakfast + rest at hotel","food","Free breakfast, served 7–9 AM. Sleep in and pack slowly.",""],
+    ["11:00","Check out","rest","Load the bags into the parked car. The car stays at the hotel until 7 PM.",HOTEL],
+    ["11:15","Mirador Heritage & Eco Park","see","Short taxi ride. Pine forest and a torii gate.","Mirador Heritage and Eco Park Baguio"],
+    ["12:30","Lunch at Ili-Likha Artists Village","food","Taxi to Session Road. Eat at the food stalls.","Ili-Likha Artists Village Baguio"],
+    ["14:00","North Haven Spa","rest","Beside Casa Vallejo, Upper Session Rd. Book ahead. The driver rests here.","North Haven Spa Casa Vallejo Baguio"],
+    ["15:30","SM City Baguio","see","Next to the spa. Sky Park, cafés, and pine views. Coffee for the drive.","SM City Baguio"],
+    ["16:15","Baguio City Market","food","Walk down Session Road. Strawberry jam, peanut brittle, veggies.","Baguio City Public Market"],
+    ["17:00","Early dinner at Canto","food","Kisad Rd, across Burnham. Get the ribs. Take your time.","Canto Bogchi Joint Kisad Road Baguio"],
+    ["18:50","Pick up car at hotel","drive","Short walk or taxi from Canto. Put the pasalubong in.",HOTEL],
+    ["19:00","Drive home","drive","Coding ends at 7 PM. Expect Manila around midnight to 1 AM. Swap drivers at a TPLEX service area if you can.",""]
+  ]}
+];
+const TODOS = [
+  ["book-spa","Book North Haven Spa for 2 PM, Nov 18","Group booking, so call early."],
+  ["parking","Confirm the car can stay parked until 7 PM on Nov 18","Ask the front desk at check-in."],
+  ["kennon","Check Kennon Road status","Needed for Lion’s Head on Nov 17."],
+  ["cathy","Check Cathy’s Fastfood closing time","For Tuesday dinner at 7:30 PM."],
+  ["car","Check brakes, tires, and coolant","Before the drive up."],
+  ["cash","Bring plenty of small bills","Entrance fees, parking, taxis, market stalls."],
+  ["jackets","Pack jackets for everyone","Atok and early mornings get cold."]
+];
+const FEES = [
+  ["Northern Blossom (adult)","₱250"],
+  ["Northern Blossom (senior/PWD)","₱200"],
+  ["Christmas Village (adult)","₱150*"],
+  ["Christmas Village (kids 8–12)","₱130*"],
+  ["Christmas Village (senior/PWD)","₱120*"],
+  ["Camp John Hay Historical Core","small fee"]
+];
+
+const KEY = "baguio-trip-v1";
+let state = {};
+try { state = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch(e) { state = {}; }
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){} }
+
+const toMin = t => { const [h,m] = t.split(":").map(Number); return h*60+m; };
+const fmt = t => { let [h,m] = t.split(":").map(Number); const ap = h>=12?"PM":"AM"; h = h%12||12; return `${h}:${String(m).padStart(2,"0")}<br>${ap}`; };
+const fmtInline = t => fmt(t).replace("<br>"," ");
+const mapUrl = q => "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q);
+const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+
+function manilaNow(){
+  const parts = new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Manila",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hour12:false}).formatToParts(new Date());
+  const g = k => parts.find(p=>p.type===k).value;
+  return {date:`${g("year")}-${g("month")}-${g("day")}`, min: (Number(g("hour"))%24)*60 + Number(g("minute"))};
+}
+function currentIndex(day, now){
+  if (now.date !== day.date) return -1;
+  let idx = -1;
+  day.stops.forEach((s,i)=>{ if (toMin(s[0]) <= now.min) idx = i; });
+  return idx;
+}
+
+const tabsEl = document.getElementById("tabs");
+const viewEl = document.getElementById("view");
+const VIEWS = [...DAYS.map(d=>({id:d.id, short:d.short, num:d.num})), {id:"prep", short:"Prep", num:"✓"}];
+
+function renderTabs(active){
+  tabsEl.innerHTML = VIEWS.map(v=>`<button class="tab" role="tab" aria-selected="${v.id===active}" data-id="${v.id}"><b>${v.num}</b><span>${v.short}</span></button>`).join("");
+}
+tabsEl.addEventListener("click", e=>{
+  const b = e.target.closest(".tab"); if (!b) return;
+  location.hash = b.dataset.id;
+});
+
+function renderDay(day){
+  const now = manilaNow();
+  const cur = currentIndex(day, now);
+  const doneCount = day.stops.filter((s,i)=>state[`${day.id}-${i}`]).length;
+  viewEl.innerHTML = `
+    <h2 class="day-title">${day.title}</h2>
+    <p class="day-sub">${day.sub}</p>
+    <div class="progress" aria-hidden="true"><i style="width:${Math.round(doneCount/day.stops.length*100)}%"></i></div>
+    <ol class="trail">${day.stops.map((s,i)=>{
+      const [t,name,kind,blurb,q] = s; const id = `${day.id}-${i}`;
+      const cls = ["stop","k-"+kind, state[id]?"done":"", i===cur?"now open":""].join(" ");
+      return `<li class="${cls}" data-i="${i}">
+        <div class="time">${fmt(t)}</div>
+        <div class="node"></div>
+        <div class="card">
+          <button class="stop-head" type="button" aria-expanded="${i===cur}">
+            <h3>${esc(name)} <span class="now-tag">Now</span></h3>
+            <svg class="chev" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+          </button>
+          <div class="detail">
+            <p>${esc(blurb)}</p>
+            <div class="actions">
+              ${q?`<a class="btn primary" href="${mapUrl(q)}" target="_blank" rel="noopener">Open in Maps</a>`:""}
+              <label class="btn"><input type="checkbox" class="check" data-id="${id}" ${state[id]?"checked":""}> Done</label>
+            </div>
+          </div>
+        </div>
+      </li>`;}).join("")}</ol>`;
+}
+
+function renderPrep(){
+  viewEl.innerHTML = `
+    <h2 class="day-title">Before you go</h2>
+    <p class="day-sub">Tick these off this week.</p>
+    <div class="section">${TODOS.map(([id,t,s])=>`
+      <div class="todo"><input type="checkbox" class="check" id="t-${id}" data-id="todo-${id}" ${state["todo-"+id]?"checked":""}>
+      <label for="t-${id}">${t}<small>${s}</small></label></div>`).join("")}</div>
+    <div class="section"><h2>Entrance fees</h2>
+      <table class="fees">${FEES.map(([a,b])=>`<tr><td>${a}</td><td>${b}</td></tr>`).join("")}</table>
+      <p class="note">*Christmas Village rates come from a local blog. Confirm at the gate.</p>
+    </div>
+    <div class="section"><h2>Hotel</h2>
+      <p style="margin:0 0 10px">NYC Manhattan Suites, 37 Sepic Rd, Campo Filipino. Check-out 11 AM. Free breakfast 7–9 AM.</p>
+      <a class="btn primary" href="${mapUrl(HOTEL)}" target="_blank" rel="noopener">Open in Maps</a>
+    </div>`;
+}
+
+viewEl.addEventListener("click", e=>{
+  const head = e.target.closest(".stop-head");
+  if (head){ const li = head.closest(".stop"); li.classList.toggle("open"); head.setAttribute("aria-expanded", li.classList.contains("open")); }
+});
+viewEl.addEventListener("change", e=>{
+  const c = e.target.closest(".check"); if (!c) return;
+  state[c.dataset.id] = c.checked; save();
+  const li = c.closest(".stop"); if (li) li.classList.toggle("done", c.checked);
+  const d = DAYS.find(d=>c.dataset.id.startsWith(d.id+"-"));
+  if (d){ const n = d.stops.filter((s,i)=>state[`${d.id}-${i}`]).length; viewEl.querySelector(".progress i").style.width = Math.round(n/d.stops.length*100)+"%"; }
+});
+
+function renderStatus(){
+  const el = document.getElementById("status");
+  const now = manilaNow();
+  const day = DAYS.find(d=>d.date===now.date);
+  if (day){
+    const i = currentIndex(day, now);
+    const next = day.stops[i+1];
+    const curName = i>=0 ? day.stops[i][1] : "Getting ready";
+    el.innerHTML = `<strong>Now:</strong> ${esc(curName)}` + (next ? `<br><strong>Next:</strong> ${esc(next[1])} at ${fmtInline(next[0])}` : "");
+    return;
+  }
+  const start = Date.UTC(2026,10,16), today = Date.parse(now.date+"T00:00:00Z");
+  const days = Math.round((start - today)/86400000);
+  el.innerHTML = days > 0 ? `<strong>${days} ${days===1?"day":"days"}</strong> until you leave. Wheels up at 5 AM.` : "";
+}
+
+function route(){
+  const h = location.hash.replace("#","");
+  const now = manilaNow();
+  const today = DAYS.find(d=>d.date===now.date);
+  const id = VIEWS.some(v=>v.id===h) ? h : (today ? today.id : "mon");
+  renderTabs(id);
+  const day = DAYS.find(d=>d.id===id);
+  day ? renderDay(day) : renderPrep();
+  renderStatus();
+}
+window.addEventListener("hashchange", route);
+route();
+setInterval(()=>{ renderStatus(); }, 60000);
+
+/* theme toggle */
+const themeBtn = document.getElementById("themeBtn");
+function applyTheme(t){ if (t) document.documentElement.setAttribute("data-theme", t); else document.documentElement.removeAttribute("data-theme"); }
+let theme = null; try { theme = localStorage.getItem(KEY+"-theme"); } catch(e){}
+applyTheme(theme);
+themeBtn.addEventListener("click", ()=>{
+  const dark = theme ? theme==="dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  theme = dark ? "light" : "dark"; applyTheme(theme);
+  try { localStorage.setItem(KEY+"-theme", theme); } catch(e){}
+});
+</script>
+</body>
+</html>
